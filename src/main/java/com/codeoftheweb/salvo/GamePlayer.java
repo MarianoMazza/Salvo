@@ -5,9 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,6 +26,9 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    private Set<Ship> ships;
+
     public GamePlayer() {
     }
 
@@ -35,6 +36,7 @@ public class GamePlayer {
         this.creationDate = currentDateGamePlayer;
         this.game = game;
         this.player = player;
+        this.ships = new HashSet();
     }
 
     public long getId() {
@@ -65,6 +67,18 @@ public class GamePlayer {
         this.player = player;
     }
 
+    public void AddShip(Ship ship){
+        ships.add(ship);
+    }
+
+    public Set<Ship> getShips() {
+        return ships;
+    }
+
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
+
     public Map<String,Object> ToDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
@@ -72,4 +86,29 @@ public class GamePlayer {
         dto.put("player", gamePlayersList);
         return dto;
     }
+
+   /*  public Map<String,Object> ShipsDTO() {
+        Map<String,Object> dto = new LinkedHashMap<>();
+        for (Ship entry:this.getShips()) {
+            dto.put("type", entry.getShipType());
+            dto.put("location", entry.getCell());
+        }
+        return dto;
+    }
+
+   public Map<String,Object> GameViewDTO(){
+        Map<String,Object> dto = new LinkedHashMap<>();
+        dto.put("id", this.getId());
+        dto.put("created", this.getGame().getCurrentDate());
+        Map<String, Object> gamePlayersList = player.ToDTO();
+        dto.put("player", gamePlayersList);
+        return dto;
+    }
+
+    public long HasPlayer(long playerId){
+        if(getPlayer().getId() == playerId){
+            return getId();
+        }else return 0;
+
+    }*/
 }

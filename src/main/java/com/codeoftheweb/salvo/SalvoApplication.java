@@ -6,16 +6,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class SalvoApplication {
 
+	private enum
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repository, GameRepository repositoryGames, GamePlayerRepository repoGamePlayers) {
+	public CommandLineRunner initData(PlayerRepository repository, GameRepository repositoryGames, GamePlayerRepository repoGamePlayers, ShipRepository shipRepository) {
 		return (args) -> {
 
 			// save a couple of players
@@ -31,10 +36,25 @@ public class SalvoApplication {
 			repositoryGames.save(new Game(LocalDateTime.now().plusHours(2)));
 
 			//game players repo
-			repoGamePlayers.save(new GamePlayer(game1.getCurrentDate(),game1,Player1));
+			GamePlayer gamePlayer1 = new GamePlayer(game1.getCurrentDate(),game1,Player1);
+			repoGamePlayers.save(gamePlayer1);
 			repoGamePlayers.save(new GamePlayer(game1.getCurrentDate(),game1,Player2));
 			repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player3));
 			repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player4));
+
+			//ships
+			Ship ship1 = new Ship( new HashSet(Arrays.asList("H1", "H2", "H3", "H4")),"Battleship", gamePlayer1);
+			Ship ship2 = new Ship( new HashSet(Arrays.asList("A1", "A2", "A3", "A4", "A5")),"Carrier", gamePlayer1);
+			Ship ship3 = new Ship( new HashSet(Arrays.asList("C1", "C2", "C3")),"Submarine", gamePlayer1);
+			Ship ship4 = new Ship( new HashSet(Arrays.asList("D1", "D2", "D3")),"Destroyer", gamePlayer1);
+			Ship ship5 = new Ship( new HashSet(Arrays.asList("K1", "K2")),"Patrol Boat", gamePlayer1);
+			gamePlayer1.AddShip(ship1);
+			shipRepository.save(ship1);
+			shipRepository.save(ship2);
+			shipRepository.save(ship3);
+			shipRepository.save(ship4);
+			shipRepository.save(ship5);
+
 		};
 	}
 }
