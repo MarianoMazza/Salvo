@@ -23,7 +23,7 @@ public class Game {
     private LocalDateTime currentDateGame;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
-    private Set<GamePlayer> gamePlayerSet;
+    private Set<GamePlayer> players;
 
     public Game() { }
 
@@ -45,14 +45,14 @@ public class Game {
 
     public void addGamePlayer(GamePlayer gamePlayer){
         gamePlayer.setGame(this);
-        gamePlayerSet.add(gamePlayer);
+        players.add(gamePlayer);
     }
 
     public Map<String,Object> ToDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("created", this.getCurrentDate());
-        List<Object> gamePlayersList = gamePlayerSet.stream().map(a -> a.ToDTO()).collect(toList());
+        List<Object> gamePlayersList = players.stream().map(a -> a.ToDTO()).collect(toList());
         dto.put("gamePlayers", gamePlayersList);
         return dto;
     }
