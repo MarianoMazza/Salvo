@@ -1,13 +1,7 @@
 package com.codeoftheweb.salvo;
 
-import com.codeoftheweb.salvo.Interface.GamePlayerRepository;
-import com.codeoftheweb.salvo.Interface.GameRepository;
-import com.codeoftheweb.salvo.Interface.PlayerRepository;
-import com.codeoftheweb.salvo.Interface.ShipRepository;
-import com.codeoftheweb.salvo.Model.Game;
-import com.codeoftheweb.salvo.Model.GamePlayer;
-import com.codeoftheweb.salvo.Model.Player;
-import com.codeoftheweb.salvo.Model.Ship;
+import com.codeoftheweb.salvo.Interface.*;
+import com.codeoftheweb.salvo.Model.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +19,7 @@ public class SalvoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repository, GameRepository repositoryGames, GamePlayerRepository repoGamePlayers, ShipRepository shipRepository) {
+	public CommandLineRunner initData(PlayerRepository repository, GameRepository repositoryGames, GamePlayerRepository repoGamePlayers, ShipRepository shipRepository, SalvoRepository salvoRepository) {
 		return (args) -> {
 
 			// save a couple of players
@@ -67,6 +61,9 @@ public class SalvoApplication {
 			shipRepository.save(ship6);
 			shipRepository.save(ship7);
 			shipRepository.save(ship8);
+
+			Salvo salvo1 = new Salvo(gamePlayer1, new HashSet(Arrays.asList("H1", "A1")), 1);
+			salvoRepository.save(salvo1);
 		};
 	}
 }

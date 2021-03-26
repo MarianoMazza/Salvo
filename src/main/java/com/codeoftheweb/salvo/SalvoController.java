@@ -2,10 +2,8 @@ package com.codeoftheweb.salvo;
 import com.codeoftheweb.salvo.Interface.GamePlayerRepository;
 import com.codeoftheweb.salvo.Interface.GameRepository;
 import com.codeoftheweb.salvo.Interface.PlayerRepository;
-import com.codeoftheweb.salvo.Model.Game;
-import com.codeoftheweb.salvo.Model.GamePlayer;
-import com.codeoftheweb.salvo.Model.Player;
-import com.codeoftheweb.salvo.Model.Ship;
+import com.codeoftheweb.salvo.Interface.SalvoRepository;
+import com.codeoftheweb.salvo.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +19,17 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api")
 public class SalvoController {
 
-        @Autowired
-        private PlayerRepository playerRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
-        @Autowired
-        private GameRepository gameRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
-        @Autowired
-        private GamePlayerRepository gamePlayerRepository;
+    @Autowired
+    private GamePlayerRepository gamePlayerRepository;
+
+    @Autowired
+    private SalvoRepository salvoRepository;
 
         @RequestMapping("/games")
         public List<Object> getAllGames() {
@@ -51,6 +52,7 @@ public class SalvoController {
         if(gameplayer.isPresent()){
             Map<String,Object> gameDTO = gameplayer.get().getGame().ToDTO();
             gameDTO.put("Ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(Ship::shipDTO));
+            gameDTO.put("Salvos", gamePlayerRepository.getOne(gamePlayerId).getSalvos().stream().map(Salvo::salvoDTO));
             response = new ResponseEntity<>(gameDTO, HttpStatus.ACCEPTED);
         }else{
             Map<String,Object> mapAux = new LinkedHashMap<>();
