@@ -14,7 +14,6 @@ import java.util.Set;
 @SpringBootApplication
 public class SalvoApplication {
 
-	//private enum
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
@@ -38,7 +37,8 @@ public class SalvoApplication {
 			//game players repo
 			GamePlayer gamePlayer1 = new GamePlayer(game1.getCurrentDate(),game1,Player1);
 			repoGamePlayers.save(gamePlayer1);
-			repoGamePlayers.save(new GamePlayer(game1.getCurrentDate(),game1,Player2));
+			GamePlayer gamePlayer2 = new GamePlayer(game1.getCurrentDate(),game1,Player2);
+			repoGamePlayers.save(gamePlayer2);
 			repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player3));
 			repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player4));
 
@@ -48,12 +48,19 @@ public class SalvoApplication {
 			Ship ship3 = new Ship( new HashSet(Arrays.asList("C1", "C2", "C3")),"Submarine", gamePlayer1);
 			Ship ship4 = new Ship( new HashSet(Arrays.asList("D1", "D2", "D3")),"Destroyer", gamePlayer1);
 			Ship ship5 = new Ship( new HashSet(Arrays.asList("J1", "J2")),"Patrol Boat", gamePlayer1);
-			gamePlayer1.AddShip(ship1);
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
 			shipRepository.save(ship4);
 			shipRepository.save(ship5);
+
+			//ships
+			Ship ship6 = new Ship( new HashSet(Arrays.asList("H1", "H2", "H3", "H4")),"Battleship", gamePlayer2);
+			Ship ship7 = new Ship( new HashSet(Arrays.asList("B1", "B2", "B3", "B4", "B5")),"Carrier", gamePlayer2);
+			Ship ship8 = new Ship( new HashSet(Arrays.asList("C1", "C2", "C3")),"Submarine", gamePlayer2);
+			shipRepository.save(ship6);
+			shipRepository.save(ship7);
+			shipRepository.save(ship8);
 		};
 	}
 }

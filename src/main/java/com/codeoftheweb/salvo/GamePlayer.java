@@ -86,5 +86,4 @@ public class GamePlayer {
         dto.put("player", gamePlayersList);
         return dto;
     }
-
 }
