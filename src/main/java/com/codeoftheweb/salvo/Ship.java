@@ -38,7 +38,6 @@ public class Ship {
         return id;
     }
 
-
     public GamePlayer getGamePlayer() {
         return gamePlayer;
     }

@@ -1,12 +1,12 @@
 package com.codeoftheweb.salvo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -36,21 +36,21 @@ public class SalvoController {
                 return list.stream().map(player -> player.ToDTO()).collect(toList());
         }
 
-
-   /* @RequestMapping("/game_view/{nn}")
-    public List<Object> getGameView(@PathVariable long nn) {
-        List<GamePlayer> list = gamePlayerRepository.findAll();
-        List<Long> lista = list.stream().map(gamePlayer -> gamePlayer.HasPlayer(nn)).collect(toList());
-        List<GamePlayer> list3 = gamePlayerRepository.findAllById(lista);
-        return list3.stream().map(gamePlayer -> gamePlayer.GameViewDTO()).collect(toList());
-    }*/
-
     @RequestMapping("/game_view/{gamePlayerId}")
-    public Map<String,Object> getGameView(@PathVariable long gamePlayerId) {
-        Map<String,Object> mapa = gamePlayerRepository.getOne(gamePlayerId).getGame().ToDTO();
-        //mapa.put("Ships", gamePlayerRepository.getOne(gamePlayerId).ShipsDTO());
-        mapa.put("Ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(Ship::shipDTO));
+    public ResponseEntity<Map<String,Object>> getGameView(@PathVariable long gamePlayerId) {
 
-        return mapa;
+        Optional<GamePlayer> gameplayer = gamePlayerRepository.findById(gamePlayerId);
+        ResponseEntity<Map<String,Object>> response;
+
+        if(gameplayer.isPresent()){
+            Map<String,Object> gameDTO = gameplayer.get().getGame().ToDTO();
+            gameDTO.put("Ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(Ship::shipDTO));
+            response = new ResponseEntity<>(gameDTO, HttpStatus.ACCEPTED);
+        }else{
+            Map<String,Object> mapAux = new LinkedHashMap<>();
+            mapAux.put("Problem","gameplayer does not exist");
+            response = new ResponseEntity<>(mapAux, HttpStatus.UNAUTHORIZED);
+        }
+        return response;
     }
 }

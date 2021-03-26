@@ -87,28 +87,4 @@ public class GamePlayer {
         return dto;
     }
 
-   /*  public Map<String,Object> ShipsDTO() {
-        Map<String,Object> dto = new LinkedHashMap<>();
-        for (Ship entry:this.getShips()) {
-            dto.put("type", entry.getShipType());
-            dto.put("location", entry.getCell());
-        }
-        return dto;
-    }
-
-   public Map<String,Object> GameViewDTO(){
-        Map<String,Object> dto = new LinkedHashMap<>();
-        dto.put("id", this.getId());
-        dto.put("created", this.getGame().getCurrentDate());
-        Map<String, Object> gamePlayersList = player.ToDTO();
-        dto.put("player", gamePlayersList);
-        return dto;
-    }
-
-    public long HasPlayer(long playerId){
-        if(getPlayer().getId() == playerId){
-            return getId();
-        }else return 0;
-
-    }*/
 }

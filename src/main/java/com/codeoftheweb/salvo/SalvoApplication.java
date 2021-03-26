@@ -14,7 +14,7 @@ import java.util.Set;
 @SpringBootApplication
 public class SalvoApplication {
 
-	private enum
+	//private enum
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
@@ -47,14 +47,13 @@ public class SalvoApplication {
 			Ship ship2 = new Ship( new HashSet(Arrays.asList("A1", "A2", "A3", "A4", "A5")),"Carrier", gamePlayer1);
 			Ship ship3 = new Ship( new HashSet(Arrays.asList("C1", "C2", "C3")),"Submarine", gamePlayer1);
 			Ship ship4 = new Ship( new HashSet(Arrays.asList("D1", "D2", "D3")),"Destroyer", gamePlayer1);
-			Ship ship5 = new Ship( new HashSet(Arrays.asList("K1", "K2")),"Patrol Boat", gamePlayer1);
+			Ship ship5 = new Ship( new HashSet(Arrays.asList("J1", "J2")),"Patrol Boat", gamePlayer1);
 			gamePlayer1.AddShip(ship1);
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
 			shipRepository.save(ship4);
 			shipRepository.save(ship5);
-
 		};
 	}
 }
