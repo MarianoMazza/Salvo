@@ -1,5 +1,13 @@
 package com.codeoftheweb.salvo;
 
+import com.codeoftheweb.salvo.Interface.GamePlayerRepository;
+import com.codeoftheweb.salvo.Interface.GameRepository;
+import com.codeoftheweb.salvo.Interface.PlayerRepository;
+import com.codeoftheweb.salvo.Interface.ShipRepository;
+import com.codeoftheweb.salvo.Model.Game;
+import com.codeoftheweb.salvo.Model.GamePlayer;
+import com.codeoftheweb.salvo.Model.Player;
+import com.codeoftheweb.salvo.Model.Ship;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +16,6 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 public class SalvoApplication {

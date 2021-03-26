@@ -1,6 +1,6 @@
-package com.codeoftheweb.salvo;
-import java.time.LocalDateTime;
-import java.util.List;
+package com.codeoftheweb.salvo.Interface;
+
+import com.codeoftheweb.salvo.Model.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

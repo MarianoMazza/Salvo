@@ -1,11 +1,9 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.Interface;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.codeoftheweb.salvo.Model.Ship;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface GamePlayerRepository extends JpaRepository<GamePlayer, Long>{
-
+public interface ShipRepository extends JpaRepository<Ship, Long> {
 }
