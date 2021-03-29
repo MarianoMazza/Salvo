@@ -47,12 +47,21 @@ public class Game {
         players.add(gamePlayer);
     }
 
+    public Set<GamePlayer> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<GamePlayer> players) {
+        this.players = players;
+    }
+
     public Map<String,Object> ToDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("created", this.getCurrentDate());
-        List<Object> gamePlayersList = players.stream().map(a -> a.ToDTO()).collect(toList());
+        List<Object> gamePlayersList = players.stream().map(player -> player.ToDTO()).collect(toList());
         dto.put("gamePlayers", gamePlayersList);
         return dto;
     }
+
 }

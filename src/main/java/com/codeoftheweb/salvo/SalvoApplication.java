@@ -39,8 +39,8 @@ public class SalvoApplication {
 			repoGamePlayers.save(gamePlayer1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1.getCurrentDate(),game1,Player2);
 			repoGamePlayers.save(gamePlayer2);
-			repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player3));
-			repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player4));
+			GamePlayer gamePlayer3 = repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player3));
+			GamePlayer gamePlayer4 = repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player4));
 
 			//ships
 			Ship ship1 = new Ship( new HashSet(Arrays.asList("H1", "H2", "H3", "H4")),"Battleship", gamePlayer1);
@@ -64,6 +64,27 @@ public class SalvoApplication {
 
 			Salvo salvo1 = new Salvo(gamePlayer1, new HashSet(Arrays.asList("H1", "A1")), 1);
 			salvoRepository.save(salvo1);
+			Salvo salvo2 = new Salvo(gamePlayer2, new HashSet(Arrays.asList("B2", "A1")), 2);
+			salvoRepository.save(salvo2);
+
+			Salvo salvo3 = new Salvo(gamePlayer3, new HashSet(Arrays.asList("H1", "A1")), 1);
+			salvoRepository.save(salvo3);
+			Salvo salvo4 = new Salvo(gamePlayer4, new HashSet(Arrays.asList("B2", "A1")), 2);
+			salvoRepository.save(salvo4);
+
+			Ship ship9 = new Ship( new HashSet(Arrays.asList("H1", "H2", "H3", "H4")),"Battleship", gamePlayer3);
+			Ship ship10 = new Ship( new HashSet(Arrays.asList("B1", "B2", "B3", "B4", "B5")),"Carrier", gamePlayer3);
+			Ship ship11 = new Ship( new HashSet(Arrays.asList("C1", "C2", "C3")),"Submarine", gamePlayer3);
+			shipRepository.save(ship9);
+			shipRepository.save(ship10);
+			shipRepository.save(ship11);
+
+			Ship ship12 = new Ship( new HashSet(Arrays.asList("H1", "H2", "H3", "H4")),"Battleship", gamePlayer4);
+			Ship ship13 = new Ship( new HashSet(Arrays.asList("B1", "B2", "B3", "B4", "B5")),"Carrier", gamePlayer4);
+			Ship ship14 = new Ship( new HashSet(Arrays.asList("C1", "C2", "C3")),"Submarine", gamePlayer4);
+			shipRepository.save(ship12);
+			shipRepository.save(ship13);
+			shipRepository.save(ship14);
 		};
 	}
 }

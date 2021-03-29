@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 @Entity
 public class GamePlayer {
 
@@ -93,5 +95,10 @@ public class GamePlayer {
         Map<String, Object> gamePlayersList = player.ToDTO();
         dto.put("player", gamePlayersList);
         return dto;
+    }
+
+    public List<Map<String,Object>> Salvos(){
+        List<Map<String,Object>> salvoSet = getSalvos().stream().map(salvo -> salvo.salvoDTO()).collect(toList());
+        return salvoSet;
     }
 }
