@@ -101,4 +101,8 @@ public class GamePlayer {
         List<Map<String,Object>> salvoSet = getSalvos().stream().map(salvo -> salvo.salvoDTO()).collect(toList());
         return salvoSet;
     }
+
+    public Score GetScore(){
+        return getGame().getScore().stream().filter(score->score.getPlayerId().getId() == this.getPlayer().getId()).findFirst().orElse(null);
+    }
 }

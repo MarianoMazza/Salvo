@@ -1,8 +1,5 @@
 package com.codeoftheweb.salvo;
-import com.codeoftheweb.salvo.Interface.GamePlayerRepository;
-import com.codeoftheweb.salvo.Interface.GameRepository;
-import com.codeoftheweb.salvo.Interface.PlayerRepository;
-import com.codeoftheweb.salvo.Interface.SalvoRepository;
+import com.codeoftheweb.salvo.Interface.*;
 import com.codeoftheweb.salvo.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +28,10 @@ public class SalvoController {
     @Autowired
     private SalvoRepository salvoRepository;
 
-        @RequestMapping("/games")
+    @Autowired
+    private ScoreRepository scoreRepository;
+
+    @RequestMapping("/games")
         public List<Object> getAllGames() {
                 List<Game> list = gameRepository.findAll();
                 return list.stream().map(game -> game.ToDTO()).collect(toList());

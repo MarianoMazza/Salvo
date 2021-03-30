@@ -3,9 +3,9 @@ package com.codeoftheweb.salvo.Model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Player {
@@ -18,6 +18,9 @@ public class Player {
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayerSet;
+
+    @OneToMany(mappedBy = "playerId", fetch = FetchType.EAGER)
+    private Set<Score> score;
 
     public Player() { }
 
@@ -37,6 +40,26 @@ public class Player {
         this.userName = userName;
     }
 
+    public Set<Score> getScore() {
+        return score;
+    }
+
+    public Optional<Score> getScore(Game game) {
+        return getScore().stream().filter(score1 -> score1.getGameId().equals(game)).findFirst();
+    }
+
+    public void setScore(Set<Score> score) {
+        this.score = score;
+    }
+
+    public Set<GamePlayer> getGamePlayerSet() {
+        return gamePlayerSet;
+    }
+
+    public void setGamePlayerSet(Set<GamePlayer> gamePlayerSet) {
+        this.gamePlayerSet = gamePlayerSet;
+    }
+
     public void addGamePlayer(GamePlayer gamePlayer){
         gamePlayer.setPlayer(this);
         gamePlayerSet.add(gamePlayer);
@@ -46,6 +69,16 @@ public class Player {
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("mail", this.getUserName());
+        //dto.put("score", ScorePlayerDTO());
         return dto;
     }
+
+   /*public Map<String,Object> ScorePlayerDTO(){
+        Map<String,Object> dto = new LinkedHashMap<>();
+        dto.put("total", TotalScore());
+        dto.put("win", WinScore());
+        dto.put("tie", TieScore());
+        dto.put("lose", LoseScore());
+        return dto;
+    }*/
 }

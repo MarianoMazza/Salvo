@@ -24,6 +24,9 @@ public class Game {
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> players;
 
+    @OneToMany(mappedBy = "gameId", fetch = FetchType.EAGER)
+    private Set<Score> score;
+
     public Game() { }
 
     public Game(LocalDateTime currentDate) {
@@ -55,12 +58,23 @@ public class Game {
         this.players = players;
     }
 
+    public Set<Score> getScore() {
+        return score;
+    }
+
+    public void setScore(Set<Score> score) {
+        this.score = score;
+    }
+
     public Map<String,Object> ToDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("created", this.getCurrentDate());
         List<Object> gamePlayersList = players.stream().map(player -> player.ToDTO()).collect(toList());
         dto.put("gamePlayers", gamePlayersList);
+        if(getScore().stream().map(Score::ToDTO).collect(toList()) != null) {
+            dto.put("score", getScore().stream().map(score1 -> score1.ToDTO()).collect(toList()));
+        }
         return dto;
     }
 
