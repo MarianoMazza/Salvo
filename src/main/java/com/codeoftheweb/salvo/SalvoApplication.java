@@ -29,12 +29,10 @@ public class SalvoApplication {
 			Player Player2 = repository.save(new Player("Chloe@gmail.com"));
 			Player Player3 = repository.save(new Player("Kim@gmail.com"));
 			Player Player4 = repository.save(new Player("David@gmail.com"));
-			repository.save(new Player("Michelle@gmail.com"));
 
 			//save games
 			Game game1 = repositoryGames.save(new Game(LocalDateTime.now()));
 			Game game2 = repositoryGames.save(new Game(LocalDateTime.now().plusHours(1)));
-			repositoryGames.save(new Game(LocalDateTime.now().plusHours(2)));
 
 			//game players repo
 			GamePlayer gamePlayer1 = new GamePlayer(game1.getCurrentDate(),game1,Player1);
@@ -47,6 +45,8 @@ public class SalvoApplication {
 			//scores
 			Score score1= scoreRepository.save(new Score(game1,Player1,0.5f));
 			Score score2= scoreRepository.save(new Score(game1,Player2,1));
+			Score score3= scoreRepository.save(new Score(game2,Player3,0.5f));
+			Score score4= scoreRepository.save(new Score(game2,Player4,1));
 
 
 			//ships

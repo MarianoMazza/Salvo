@@ -32,9 +32,10 @@ public class SalvoController {
     private ScoreRepository scoreRepository;
 
     @RequestMapping("/games")
-        public List<Object> getAllGames() {
-                List<Game> list = gameRepository.findAll();
-                return list.stream().map(game -> game.ToDTO()).collect(toList());
+        public Map<String, Object> getAllGames() {
+        Map<String,Object> dto = new LinkedHashMap<>();
+        dto.put("games", gameRepository.findAll().stream().map(game -> game.ToDTO()).collect(toList()));
+        return dto;
         }
 
         @RequestMapping("/players")
