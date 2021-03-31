@@ -9,7 +9,7 @@ function updateViewGames(data) {
 
   var htmlList = data.games.map(function (game) {
       return  '<li class="list-group-item">' + new Date(game.created).toLocaleString() + ' '
-      + game.gamePlayers.map(function(element) { return element.player.mail}).join(', ') + '</li>';
+      + game.gamePlayers.map(function(element) { return element.player.email}).join(', ') + '</li>';
   }).join('');
   document.getElementById("game-list").innerHTML = htmlList;
 }
@@ -27,8 +27,8 @@ function getPlayers(data) {
               playersIds.push(data[i].gamePlayers[j].player.id);
               let playerScoreData = {
                   "id": data[i].gamePlayers[j].player.id,
-                  "email": data[i].gamePlayers[j].player.mail,
-                  "score": [],
+                  "email": data[i].gamePlayers[j].player.email,
+                  "scores": [],
                   "total": 0.0
               };
               players.push(playerScoreData);
@@ -42,16 +42,16 @@ function addScoresToPlayersArray(players, data) {
 
   for (let i = 0; i < data.length; i++) {
 
-        for (let j = 0; j < data[i].score.length; j++) {
+        for (let j = 0; j < data[i].scores.length; j++) {
 
-                  if(data[i].score[j]  != null){
-                    let scorePlayerId = data[i].score[j].player;
+                  if(data[i].scores[j]  != null){
+                    let scorePlayerId = data[i].scores[j].player;
 
                                       for (let k = 0; k < players.length; k++) {
 
                                           if (players[k].id == scorePlayerId) {
-                                              players[k].score.push(data[i].score[j].score);
-                                              players[k].total += data[i].score[j].score;
+                                              players[k].scores.push(data[i].scores[j].score);
+                                              players[k].total += data[i].scores[j].score;
                                           }
                                       }
                   }
@@ -78,14 +78,14 @@ function showScoreBoard(players) {
       let countLost = 0;
       let countTied = 0;
 
-      if (players[m].score.length > 0) {
+      if (players[m].scores.length > 0) {
 
-          for (let n = 0; n < players[m].score.length; n++) {
-              if (players[m].score[n] == 0.0) {
+          for (let n = 0; n < players[m].scores.length; n++) {
+              if (players[m].scores[n] == 0.0) {
                   countLost++;
-              } else if (players[m].score[n] == 0.5) {
+              } else if (players[m].scores[n] == 0.5) {
                   countTied++;
-              } else if (players[m].score[n] == 1.0) {
+              } else if (players[m].scores[n] == 1.0) {
                   countWon++;
               }
           }

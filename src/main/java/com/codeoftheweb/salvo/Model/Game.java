@@ -73,7 +73,7 @@ public class Game {
         List<Object> gamePlayersList = players.stream().map(player -> player.ToDTO()).collect(toList());
         dto.put("gamePlayers", gamePlayersList);
         if(getScore().stream().map(Score::ToDTO).collect(toList()) != null) {
-            dto.put("score", getScore().stream().map(score1 -> score1.ToDTO()).collect(toList()));
+            dto.put("scores", getScore().stream().map(score1 -> score1.ToDTO()).collect(toList()));
         }
         return dto;
     }

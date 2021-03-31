@@ -16,26 +16,26 @@ function loadData() {
       else
         playerInfo = [data.gamePlayers[1].player, data.gamePlayers[0].player];
 
-      $('#playerInfo').text(playerInfo[0].mail + '(you) vs ' + playerInfo[1].mail);
+      $('#playerInfo').text(playerInfo[0].email + '(you) vs ' + playerInfo[1].email);
 
-      data.Ships.forEach(function (shipPiece) {
-        shipPiece.location.forEach(function (shipLocation) {
-          if(isHit(shipLocation,data.Salvos,playerInfo[0].id)  !=  0){
+      data.ships.forEach(function (shipPiece) {
+        shipPiece.locations.forEach(function (shipLocation) {
+          if(isHit(shipLocation,data.salvoes,playerInfo[0].id)  !=  0){
             $('#B_' + shipLocation).addClass('ship-piece-hited');
-                        $('#B_' + shipLocation).text(isHit(shipLocation,data.Salvos,playerInfo[0].id));
+                        $('#B_' + shipLocation).text(isHit(shipLocation,data.salvoes,playerInfo[0].id));
           }
 
           else
             $('#B_' + shipLocation).addClass('ship-piece');
         });
       });
-      data.Salvos.forEach(function (salvo) {
+      data.salvoes.forEach(function (salvo) {
         if (playerInfo[0].id === salvo.player) {
-          salvo.location.forEach(function (location) {
+          salvo.locations.forEach(function (location) {
             $('#S_' + location).addClass('salvo-piece');
           });
         } else {
-          salvo.location.forEach(function (location) {
+          salvo.locations.forEach(function (location) {
             $('#B_' + location).addClass('salvo');
           });
         }
@@ -46,11 +46,11 @@ function loadData() {
     });
 }
 
-function isHit(shipLocation,Salvos,playerId) {
+function isHit(shipLocation,salvoes,playerId) {
   var turn = 0;
-  Salvos.forEach(function (salvo) {
+  salvoes.forEach(function (salvo) {
     if(salvo.player != playerId)
-      salvo.location.forEach(function (location) {
+      salvo.locations.forEach(function (location) {
         if(shipLocation === location)
           turn = salvo.turn;
       });

@@ -52,8 +52,8 @@ public class SalvoController {
 
         if(gameplayer.isPresent()){
             Map<String,Object> gameDTO = gameplayer.get().getGame().ToDTO();
-            gameDTO.put("Ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(Ship::shipDTO));
-            gameDTO.put("Salvos", gamePlayerRepository.getOne(gamePlayerId).getGame().getPlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvos().stream().map(salvo -> salvo.salvoDTO())) .collect(toList()));
+            gameDTO.put("ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(Ship::shipDTO));
+            gameDTO.put("salvoes", gamePlayerRepository.getOne(gamePlayerId).getGame().getPlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvos().stream().map(salvo -> salvo.salvoDTO())) .collect(toList()));
             response = new ResponseEntity<>(gameDTO, HttpStatus.ACCEPTED);
         }else{
             Map<String,Object> mapAux = new LinkedHashMap<>();
