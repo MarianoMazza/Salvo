@@ -2,20 +2,41 @@ package com.codeoftheweb.salvo;
 
 import com.codeoftheweb.salvo.Interface.*;
 import com.codeoftheweb.salvo.Model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 
 @SpringBootApplication
-public class SalvoApplication {
+public class SalvoApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 	@Bean
@@ -23,12 +44,12 @@ public class SalvoApplication {
 		return (args) -> {
 
 			// save a couple of players
-			Player Player1 = new Player("Jack@gmail.com");
+			Player Player1 = new Player("j.bauer@ctu.gov",passwordEncoder().encode("24"));
 			//Player1.setScore(new HashSet(Arrays.asList(score1,score2)));
 			repository.save(Player1);
-			Player Player2 = repository.save(new Player("Chloe@gmail.com"));
-			Player Player3 = repository.save(new Player("Kim@gmail.com"));
-			Player Player4 = repository.save(new Player("David@gmail.com"));
+			Player Player2 = repository.save(new Player("c.obrian@ctu.gov",passwordEncoder().encode("42")));
+			Player Player3 = repository.save(new Player("kim_bauer@ctu.gov",passwordEncoder().encode("kb")));
+			Player Player4 = repository.save(new Player("t.almeida@ctu.gov",passwordEncoder().encode("mole")));
 
 			//save games
 			Game game1 = repositoryGames.save(new Game(LocalDateTime.now()));
@@ -95,3 +116,4 @@ public class SalvoApplication {
 		};
 	}
 }
+

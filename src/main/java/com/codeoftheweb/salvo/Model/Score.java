@@ -67,6 +67,14 @@ public class Score {
         this.finishDate = currentDateGame;
     }
 
+    public LocalDateTime getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(LocalDateTime finishDate) {
+        this.finishDate = finishDate;
+    }
+
     public Score() {
     }
 
@@ -74,6 +82,7 @@ public class Score {
         this.gameId = gameId;
         this.playerId = playerId;
         this.score = score;
+        this.finishDate = LocalDateTime.now();
     }
 
     public Map<String,Object> ToDTO(){

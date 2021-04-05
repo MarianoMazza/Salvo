@@ -1,12 +1,15 @@
 package com.codeoftheweb.salvo;
 import com.codeoftheweb.salvo.Interface.*;
 import com.codeoftheweb.salvo.Model.*;
+
+import org.hibernate.sql.OracleJoinFragment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -31,18 +34,40 @@ public class SalvoController {
     @Autowired
     private ScoreRepository scoreRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @RequestMapping("/games")
-        public Map<String, Object> getAllGames() {
+    public Map<String, Object> getAllGames(Authentication authentication) {
         Map<String,Object> dto = new LinkedHashMap<>();
+        if(!isGuest(authentication)) {
+            dto.put("player", playerRepository.findByUserName(authentication.getName()).ToDTO());
+        }
         dto.put("games", gameRepository.findAll().stream().map(game -> game.ToDTO()).collect(toList()));
         return dto;
+    }
+
+    @GetMapping("/players")
+    public List<Object> getAllPlayers() {
+        List<Player> list = playerRepository.findAll();
+        return list.stream().map(player -> player.ToDTO()).collect(toList());
+    }
+
+    @PostMapping("/players")
+    public ResponseEntity<Map<String,Object>> register(
+            @RequestParam String userName, @RequestParam String password) {
+
+        if ( userName.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>(MakeMap("Error","Missing data"), HttpStatus.FORBIDDEN);
         }
 
-        @RequestMapping("/players")
-        public List<Object> getAllPlayers() {
-                List<Player> list = playerRepository.findAll();
-                return list.stream().map(player -> player.ToDTO()).collect(toList());
+        if (playerRepository.findByUserName(userName) !=  null) {
+            return new ResponseEntity<>(MakeMap("Error","Name already in use"), HttpStatus.FORBIDDEN);
         }
+
+        playerRepository.save(new Player(userName, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(MakeMap("Message","Success, player created"),HttpStatus.CREATED);
+    }
 
     @RequestMapping("/game_view/{gamePlayerId}")
     public ResponseEntity<Map<String,Object>> getGameView(@PathVariable long gamePlayerId) {
@@ -61,5 +86,16 @@ public class SalvoController {
             response = new ResponseEntity<>(mapAux, HttpStatus.UNAUTHORIZED);
         }
         return response;
+    }
+
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
+    private Map<String, Object> MakeMap(String key, String message){
+
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put(key, message);
+        return map;
     }
 }

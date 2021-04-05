@@ -22,10 +22,13 @@ public class Player {
     @OneToMany(mappedBy = "playerId", fetch = FetchType.EAGER)
     private Set<Score> score;
 
+    private String password;
+
     public Player() { }
 
-    public Player(String _userName) {
-        userName = _userName;
+    public Player(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
     }
 
     public long getId() {
@@ -60,6 +63,14 @@ public class Player {
         this.gamePlayerSet = gamePlayerSet;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void addGamePlayer(GamePlayer gamePlayer){
         gamePlayer.setPlayer(this);
         gamePlayerSet.add(gamePlayer);
@@ -71,13 +82,5 @@ public class Player {
         dto.put("email", this.getUserName());
         return dto;
     }
-
-   /*public Map<String,Object> ScorePlayerDTO(){
-        Map<String,Object> dto = new LinkedHashMap<>();
-        dto.put("total", TotalScore());
-        dto.put("win", WinScore());
-        dto.put("tie", TieScore());
-        dto.put("lose", LoseScore());
-        return dto;
-    }*/
+    
 }
