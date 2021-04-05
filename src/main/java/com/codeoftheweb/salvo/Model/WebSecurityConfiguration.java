@@ -47,7 +47,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers("/api/games","/api/players","/api/login").permitAll()
+                .antMatchers("/api/games","/api/players","/api/login","/favicon.ico").permitAll()
                 .antMatchers("/api/game_view/*","/web/game.html").hasAuthority("USER")
                 .antMatchers("/web/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
@@ -55,8 +55,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().ignoringAntMatchers("/h2-console/**").and().headers().frameOptions().sameOrigin();
 
              http.formLogin()
-                .usernameParameter("userName")
-                .passwordParameter("password")
+                .usernameParameter("name")
+                .passwordParameter("pwd")
                 .loginPage("/api/login").permitAll()
                 .defaultSuccessUrl("/web/games.html")
                 .and()

@@ -82,5 +82,5 @@ public class Player {
         dto.put("email", this.getUserName());
         return dto;
     }
-    
+
 }
