@@ -50,10 +50,12 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Player Player2 = repository.save(new Player("c.obrian@ctu.gov",passwordEncoder().encode("42")));
 			Player Player3 = repository.save(new Player("kim_bauer@ctu.gov",passwordEncoder().encode("kb")));
 			Player Player4 = repository.save(new Player("t.almeida@ctu.gov",passwordEncoder().encode("mole")));
+			Player Player5 = repository.save(new Player("abc@ctu.gov",passwordEncoder().encode("abc")));
 
 			//save games
 			Game game1 = repositoryGames.save(new Game(LocalDateTime.now()));
 			Game game2 = repositoryGames.save(new Game(LocalDateTime.now().plusHours(1)));
+			Game game3 = repositoryGames.save(new Game(LocalDateTime.now().plusHours(2)));
 
 			//game players repo
 			GamePlayer gamePlayer1 = new GamePlayer(game1.getCurrentDate(),game1,Player1);
@@ -62,6 +64,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			repoGamePlayers.save(gamePlayer2);
 			GamePlayer gamePlayer3 = repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player3));
 			GamePlayer gamePlayer4 = repoGamePlayers.save(new GamePlayer(game2.getCurrentDate(),game2,Player4));
+			GamePlayer gamePlayer5 = repoGamePlayers.save(new GamePlayer(game3.getCurrentDate(),game3,Player5));
 
 			//scores
 			Score score1= scoreRepository.save(new Score(game1,Player1,0.5f));

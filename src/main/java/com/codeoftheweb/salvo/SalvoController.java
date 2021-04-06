@@ -40,7 +40,9 @@ public class SalvoController {
     @RequestMapping("/games")
     public Map<String, Object> getAllGames(Authentication authentication) {
         Map<String,Object> dto = new LinkedHashMap<>();
-        if(!isGuest(authentication)) {
+        if(isGuest(authentication)) {
+            dto.put("player", "Guest");
+        }else{
             dto.put("player", playerRepository.findByUserName(authentication.getName()).ToDTO());
         }
         dto.put("games", gameRepository.findAll().stream().map(game -> game.ToDTO()).collect(toList()));
