@@ -1,11 +1,8 @@
 package com.codeoftheweb.salvo.Model;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.*;
-
-import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Player {

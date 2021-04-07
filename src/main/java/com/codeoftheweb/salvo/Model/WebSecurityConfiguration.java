@@ -27,7 +27,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(inputName-> {
+        auth.userDetailsService(inputName -> {
             Player person = personRepository.findByUserName(inputName);
             if (person != null) {
                 return new User(person.getUserName(), person.getPassword(),
@@ -47,20 +47,20 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers("/api/games","/api/players","/api/login","/favicon.ico").permitAll()
-                .antMatchers("/api/game_view/*","/web/game.html").hasAuthority("USER")
+                .antMatchers("/api/games", "/api/players", "/api/login", "/favicon.ico").permitAll()
+                .antMatchers("/api/game_view/*", "/web/game.html").hasAuthority("USER")
                 .antMatchers("/web/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().ignoringAntMatchers("/h2-console/**").and().headers().frameOptions().sameOrigin();
 
-             http.formLogin()
+        http.formLogin()
                 .usernameParameter("name")
                 .passwordParameter("pwd")
                 .loginPage("/api/login").permitAll()
                 .defaultSuccessUrl("/web/games.html")
                 .and()
-                     .logout().logoutUrl("/api/logout");
+                .logout().logoutUrl("/api/logout");
 
 // turn off checking for CSRF tokens
         http.csrf().disable();
@@ -78,9 +78,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
     }
 
-    private void clearAuthenticationAttributes(HttpServletRequest request){
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session != null){
+        if (session != null) {
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         }
     }
