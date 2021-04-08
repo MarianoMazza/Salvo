@@ -47,25 +47,6 @@ public class SalvoController {
         return dto;
     }
 
-    @GetMapping("/players")
-    public List<Object> getAllPlayers() {
-        List<Player> list = playerRepository.findAll();
-        return list.stream().map(player -> player.ToDTO()).collect(toList());
-    }
-
-    @PostMapping("/players")
-    public ResponseEntity<Map<String, Object>> register(
-            @RequestParam String userName, @RequestParam String password) {
-        if (userName.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>(MakeMap("Error", "Missing data"), HttpStatus.FORBIDDEN);
-        }
-        if (playerRepository.findByUserName(userName) != null) {
-            return new ResponseEntity<>(MakeMap("Error", "Name already in use"), HttpStatus.FORBIDDEN);
-        }
-        playerRepository.save(new Player(userName, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(MakeMap("Message", "Success, player created"), HttpStatus.CREATED);
-    }
-
     @RequestMapping("/game_view/{gamePlayerId}")
     public ResponseEntity<Map<String, Object>> getGameView(@PathVariable long gamePlayerId, Authentication authentication) {
         Optional<GamePlayer> gameplayer = gamePlayerRepository.findById(gamePlayerId);
@@ -127,6 +108,26 @@ public class SalvoController {
             return new ResponseEntity<>(gameDTO, HttpStatus.CREATED);
         } else {
             return ResponseWithMap("Problem", "game is full", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/games/players/{gamePlayerId}/ships")
+    public ResponseEntity<Map<String, Object>> SaveShips(@PathVariable long gamePlayerId, Authentication authentication, @RequestBody Set<Ship> ships) {
+
+        if (isGuest(authentication))
+            return ResponseWithMap("Problem", "player does not exist", HttpStatus.UNAUTHORIZED);
+        Optional<GamePlayer> givenGP = gamePlayerRepository.findById(gamePlayerId);
+        if (!givenGP.isPresent())
+            return ResponseWithMap("Problem", "game does not exist", HttpStatus.FORBIDDEN);
+        Player loggedPlayer = playerRepository.findByUserName(authentication.getName());
+        if (givenGP.get().getPlayer().getUserName().compareTo(loggedPlayer.getUserName()) != 0)
+            return ResponseWithMap("Problem", "logged user different from game player", HttpStatus.FORBIDDEN);
+        if(!givenGP.get().getShips().isEmpty()) {
+            return ResponseWithMap("Problem", "user already has ships", HttpStatus.FORBIDDEN);
+        }else {
+            givenGP.get().setShips(ships);
+            gamePlayerRepository.save(givenGP.get());
+            return ResponseWithMap("Success", "ships loaded on game player", HttpStatus.CREATED);
         }
     }
 }

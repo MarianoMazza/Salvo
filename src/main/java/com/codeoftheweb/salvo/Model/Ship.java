@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo.Model;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.LinkedHashMap;
 import java.util.Map;

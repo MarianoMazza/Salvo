@@ -79,7 +79,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Score score13= scoreRepository.save(new Score(game8,Player2,0.5f));
 			Score score14= scoreRepository.save(new Score(game8,Player3,0.5f));
 
-			//ships
+			/*//ships
 			Ship ship1 = shipRepository.save(new Ship( new HashSet(Arrays.asList("E1", "F1", "G1")),"Submarine", gamePlayer1));
 			Ship ship2 = shipRepository.save(new Ship( new HashSet(Arrays.asList("H2", "H3", "H4")),"Destroyer", gamePlayer1));
 			Ship ship3 = shipRepository.save(new Ship( new HashSet(Arrays.asList("B4", "B5")),"Patrol Boat", gamePlayer1));
@@ -151,7 +151,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Salvo salvo20 = salvoRepository.save(new Salvo(gamePlayer10, new HashSet(Arrays.asList("C6", "D6", "E6")), 2));
 
 			Salvo salvo21 = salvoRepository.save(new Salvo(gamePlayer9, new HashSet(Arrays.asList("H1","H2")), 3));
-
+*/
 		};
 	}
 }

@@ -23,10 +23,10 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
-    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Ship> ships;
 
-    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Salvo> salvos;
 
     public GamePlayer() {
@@ -76,6 +76,10 @@ public class GamePlayer {
     }
 
     public void setShips(Set<Ship> ships) {
+
+        ships.forEach(ship -> {
+            ship.setGamePlayer(this);
+        });
         this.ships = ships;
     }
 
