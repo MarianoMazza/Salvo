@@ -130,4 +130,25 @@ public class SalvoController {
             return ResponseWithMap("Success", "ships loaded on game player", HttpStatus.CREATED);
         }
     }
+
+    @PostMapping("/games/players/{gamePlayerId}/salvos")
+    public ResponseEntity<Map<String, Object>> SaveSalvos(@PathVariable long gamePlayerId, Authentication authentication, @RequestBody Salvo salvo) {
+
+        if (isGuest(authentication))
+            return ResponseWithMap("Problem", "player does not exist", HttpStatus.UNAUTHORIZED);
+        Optional<GamePlayer> givenGP = gamePlayerRepository.findById(gamePlayerId);
+        if (!givenGP.isPresent())
+            return ResponseWithMap("Problem", "game does not exist", HttpStatus.FORBIDDEN);
+        Player loggedPlayer = playerRepository.findByUserName(authentication.getName());
+        if (givenGP.get().getPlayer().getUserName().compareTo(loggedPlayer.getUserName()) != 0)
+            return ResponseWithMap("Problem", "logged user different from game player", HttpStatus.FORBIDDEN);
+
+        if(!givenGP.get().HasSalvo(salvo)) {
+            return ResponseWithMap("Problem", "user already shot salvo this turn", HttpStatus.FORBIDDEN);
+        }else {
+            givenGP.get().getSalvos().add(salvo);
+            gamePlayerRepository.save(givenGP.get());
+            return ResponseWithMap("Success", "salvo added to gameplayer", HttpStatus.CREATED);
+        }
+    }
 }

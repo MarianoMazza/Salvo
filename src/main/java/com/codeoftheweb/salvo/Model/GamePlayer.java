@@ -51,6 +51,15 @@ public class GamePlayer {
         this.creationDate = currentDateGamePlayer;
     }
 
+    public boolean HasSalvo(Salvo salvo){
+        for(Salvo salvoInList : salvos){
+            if(salvoInList.getTurn() == salvo.getTurn())
+                return true;
+            else return false;
+        }
+        return false;
+    }
+
     public Game getGame() {
         return game;
     }
