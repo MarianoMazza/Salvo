@@ -69,6 +69,7 @@ public class Game {
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("id", this.getId());
         dto.put("created", this.getCurrentDate());
+        dto.put("gameState", "PLACESHIPS");
         List<Object> gamePlayersList = players.stream().map(player -> player.ToDTO()).collect(toList());
         dto.put("gamePlayers", gamePlayersList);
         if(getScore().stream().map(Score::ToDTO).collect(toList()) != null) {

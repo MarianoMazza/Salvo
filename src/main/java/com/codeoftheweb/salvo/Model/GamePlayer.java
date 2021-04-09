@@ -1,6 +1,9 @@
 package com.codeoftheweb.salvo.Model;
 
+import com.codeoftheweb.salvo.Interface.ShipRepository;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -55,8 +58,7 @@ public class GamePlayer {
         for(Salvo salvoInList : salvos){
             if(salvoInList.getTurn() == salvo.getTurn())
                 return true;
-            else return false;
-        }
+            }
         return false;
     }
 
@@ -88,7 +90,7 @@ public class GamePlayer {
 
         ships.forEach(ship -> {
             ship.setGamePlayer(this);
-        });
+            });
         this.ships = ships;
     }
 

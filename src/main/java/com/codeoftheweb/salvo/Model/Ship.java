@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo.Model;
 
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -15,21 +16,28 @@ public class Ship {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="gamePlayer")
+    @JoinColumn(name="gamePlayer_id")
     private GamePlayer gamePlayer;
 
     @ElementCollection
-    @Column(name = "cell")
-    private Set<String> cell;
+    @Column(name = "locations")
+    private Set<String> locations;
 
-    private String shipType;
+    private String type;
 
     public Ship() {
+        locations = new HashSet<>();
+    }
+
+    @Override
+    public String toString(){
+
+        return "Estas son las locations" + this.locations + "el type" + this.type;
     }
 
     public Ship(Set<String> cell, String shipType, GamePlayer gamePlayer) {
-        this.cell = cell;
-        this.shipType = shipType;
+        this.locations = cell;
+        this.type = shipType;
         this.gamePlayer = gamePlayer;
     }
 
@@ -45,26 +53,26 @@ public class Ship {
         this.gamePlayer = gamePlayer;
     }
 
-    public Set<String> getCell() {
-        return cell;
+    public String getType() {
+        return type;
     }
 
-    public void setCell(Set<String> cell) {
-        this.cell = cell;
+    public void setType(String shipType) {
+        this.type = shipType;
     }
 
-    public String getShipType() {
-        return shipType;
+    public Set<String> getLocations() {
+        return locations;
     }
 
-    public void setShipType(String shipType) {
-        this.shipType = shipType;
+    public void setLocations(Set<String> locations) {
+        this.locations = locations;
     }
 
     public Map<String,Object> shipDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
-        dto.put("type", getShipType());
-        dto.put("locations", getCell());
+        dto.put("type", getType());
+        dto.put("locations", getLocations());
         return dto;
     }
 }

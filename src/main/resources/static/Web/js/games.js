@@ -167,7 +167,7 @@ function updateView() {
             $('#currentPlayer').text(data.player.email);
             $('#login-form').hide("slow");
             $('#logout-form').show("slow");
-
+            $("#createGameForm").show();
         }
 }
 
@@ -322,11 +322,3 @@ function showScoreBoard(playersArray) {
             }
         }
     }
-
-
-
-
-
-
-
-
