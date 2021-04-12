@@ -78,4 +78,11 @@ public class Game {
         return dto;
     }
 
+    public GamePlayer GetEnemyGamePlayer(GamePlayer gamePlayer){
+        for(GamePlayer gpInList : getPlayers()){
+            if(gpInList.getId() != gamePlayer.getId())
+                return gpInList;
+        }
+        return null;
+    }
 }

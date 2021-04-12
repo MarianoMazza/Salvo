@@ -29,12 +29,6 @@ public class Ship {
         locations = new HashSet<>();
     }
 
-    @Override
-    public String toString(){
-
-        return "Estas son las locations" + this.locations + "el type" + this.type;
-    }
-
     public Ship(Set<String> cell, String shipType, GamePlayer gamePlayer) {
         this.locations = cell;
         this.type = shipType;
