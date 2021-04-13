@@ -51,11 +51,11 @@ public class Salvo {
         this.gamePlayer = gamePlayer;
     }
 
-    public Set<String> getLocations() {
+    public Set<String> getSalvoLocations() {
         return locations;
     }
 
-    public void setLocations(Set<String> locations) {
+    public void setSalvoLocations(Set<String> locations) {
         this.locations = locations;
     }
 
@@ -70,7 +70,7 @@ public class Salvo {
     public Map<String,Object> salvoDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("player", getGamePlayer().getId());
-        dto.put("locations", getLocations());
+        dto.put("locations", getSalvoLocations());
         dto.put("turn", getTurn());
         return dto;
     }

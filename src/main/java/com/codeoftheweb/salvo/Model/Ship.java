@@ -66,7 +66,7 @@ public class Ship {
     public Map<String,Object> shipDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("type", getType());
-        dto.put("locations", getLocations());
+        dto.put("locations", getLocations().stream().sorted());
         return dto;
     }
 }
