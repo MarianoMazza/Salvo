@@ -4,6 +4,7 @@ developed by Berenguer Pou / Ubiqum Barcelona (berenguer@ubiqum.com)
 Last update: June, 11, 2018
 */
 
+
 var gamePlayerData = {};
 var errorMsg;
 var you = "";

@@ -20,7 +20,7 @@ public class Salvo {
 
     @ElementCollection
     @Column(name = "cellsSalvo")
-    private Set<String> locations;
+    private Set<String> salvoLocations;
 
     private int turn;
 
@@ -30,12 +30,12 @@ public class Salvo {
     @Override
     public String toString(){
 
-        return "Estas son las locations" + this.locations + "el turno" + this.turn;
+        return "Estas son las locations" + this.salvoLocations + "el turno" + this.turn;
     }
 
     public Salvo(GamePlayer gamePlayer, Set<String> cellsSalvo, int turn) {
         this.gamePlayer = gamePlayer;
-        this.locations = cellsSalvo;
+        this.salvoLocations = cellsSalvo;
         this.turn = turn;
     }
 
@@ -52,11 +52,11 @@ public class Salvo {
     }
 
     public Set<String> getSalvoLocations() {
-        return locations;
+        return salvoLocations;
     }
 
     public void setSalvoLocations(Set<String> locations) {
-        this.locations = locations;
+        this.salvoLocations = locations;
     }
 
     public int getTurn() {
@@ -69,7 +69,7 @@ public class Salvo {
 
     public Map<String,Object> salvoDTO(){
         Map<String,Object> dto = new LinkedHashMap<>();
-        dto.put("player", getGamePlayer().getId());
+        dto.put("player", getGamePlayer().getPlayer().getId());
         dto.put("locations", getSalvoLocations());
         dto.put("turn", getTurn());
         return dto;

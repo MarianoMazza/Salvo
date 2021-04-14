@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -53,7 +55,7 @@ public class SalvoController {
             Map<String, Object> gameDTO = gameplayer.get().getGame().ToDTO();
             gameDTO.put("ships", gamePlayerRepository.getOne(gamePlayerId).getShips().stream().map(Ship::shipDTO));
             gameDTO.put("salvoes", gamePlayerRepository.getOne(gamePlayerId).getGame().getPlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvos().stream().map(salvo -> salvo.salvoDTO())).collect(toList()));
-            GamePlayer enemy = gameplayer.get().getGame().GetEnemyGamePlayer(gameplayer.get());
+            Optional<GamePlayer> enemy = gameplayer.get().getGame().GetEnemyGamePlayer(gameplayer.get());
             gameDTO.put("hits", GameSalvoHitsMaker(gameplayer.get(), enemy, totalDamagesSelf, totalDamagesOpp));
             gameDTO.put("gameState", GameState(gameplayer.get(), enemy, totalDamagesSelf,totalDamagesOpp));
             return new ResponseEntity<>(gameDTO, HttpStatus.ACCEPTED);
@@ -61,48 +63,53 @@ public class SalvoController {
             return Utils.ResponseWithMap("Problem", "not your game", HttpStatus.UNAUTHORIZED);
         }
     }
-    private String GameState(GamePlayer player, GamePlayer enemy, int[] totalDamagesSelf, int[] totalDamagesOpp){
-        if(enemy == null) return "WAITINGFOROPP";
+
+    private String GameState(GamePlayer player, Optional<GamePlayer> enemy, int[] totalDamagesSelf, int[] totalDamagesOpp){
+        if(enemy.isEmpty()) return "WAITINGFOROPP";
         if(player.getShips().size() == 0)
             return "PLACESHIPS";
         if(totalDamagesSelf[0] == 5 && totalDamagesSelf[1] == 4 && totalDamagesSelf[2] == 3 && totalDamagesSelf[3] == 3 && totalDamagesSelf[4] == 2
                 && totalDamagesOpp[0] == 5 && totalDamagesOpp[1] == 4 && totalDamagesOpp[2] == 3 && totalDamagesOpp[3] == 3 && totalDamagesOpp[4] == 2){
-            scoreRepository.save(new Score(player.getGame(),player.getPlayer(),0.5f));
-            //scoreRepository.save(new Score(enemy.getGame(),enemy.getPlayer(),0.5f));
+            if(player.getGame().getScore().size()<2)
+                scoreRepository.save(new Score(player.getGame(),player.getPlayer(),0.5f));
             return "TIE";
         }
         if(totalDamagesSelf[0] == 5 && totalDamagesSelf[1] == 4 && totalDamagesSelf[2] == 3 && totalDamagesSelf[3] == 3 && totalDamagesSelf[4] == 2){
-            scoreRepository.save(new Score(player.getGame(),player.getPlayer(),1));
-            //scoreRepository.save(new Score(enemy.getGame(),enemy.getPlayer(),0));
+            if(player.getGame().getScore().size()<2)
+                scoreRepository.save(new Score(player.getGame(),player.getPlayer(),1));
             return "WON";
         }
         if(totalDamagesOpp[0] == 5 && totalDamagesOpp[1] == 4 && totalDamagesOpp[2] == 3 && totalDamagesOpp[3] == 3 && totalDamagesOpp[4] == 2){
-            scoreRepository.save(new Score(player.getGame(),player.getPlayer(),0));
-            //scoreRepository.save(new Score(player.getGame(),player.getPlayer(),1));
+            if(player.getGame().getScore().size()<2)
+                scoreRepository.save(new Score(player.getGame(),player.getPlayer(),0));
             return "LOST";
         }
-        if(CalculateSalvoTurn(player) != 0 && enemy.getShips().size() != 0){
+        if(CalculateSalvoTurn(player) != 0 && enemy.get().getShips().size() != 0){
             return "PLAY";
         }
         else{ return "WAIT"; }
-        //Map<String, Object> hits = (Map)lastGameDTO.get("hits");
-        //Map<String, Object> self = (Map)lastGameDTO.get("self");
-        //Map<String, Object> damages = (Map)lastGameDTO.get("damages");
     }
 
-    public Map<String, Object> GameSalvoHitsMaker(GamePlayer gamePlayer, GamePlayer enemy, int[] totalDamagesSelf, int[] totalDamagesOpp) {
+    public Map<String, Object> GameSalvoHitsMaker(GamePlayer gamePlayer, Optional<GamePlayer> enemy, int[] totalDamagesSelf, int[] totalDamagesOpp) {
         Map<String, Object> hits = new LinkedHashMap<>();
-        hits.put("self",GameSalvoHits(enemy,  gamePlayer, totalDamagesOpp));
-        hits.put("opponent",GameSalvoHits(gamePlayer,  enemy, totalDamagesSelf));
+        if(!enemy.isEmpty()) {
+            hits.put("self", GameSalvoHits(enemy.get(), gamePlayer, totalDamagesOpp));
+            hits.put("opponent", GameSalvoHits(gamePlayer, enemy.get(), totalDamagesSelf));
+        }
+        else
+        {
+            hits.put("self", new ArrayList<>());
+            hits.put("opponent", new ArrayList<>());
+        }
         return hits;
     }
 
     public ArrayList GameSalvoHits(GamePlayer gamePlayer, GamePlayer enemy, int[] totalDamagesOut) {
         ArrayList self = new ArrayList<>();
         int[] totalDamages = new int[6];
-        //List <Salvo> opponentList = new ArrayList<>(gamePlayer.getSalvos()) ;
-        //opponentList.sort(Comparator.comparing(Salvo::getId));
-        for (Salvo salvoInList : gamePlayer.getSalvos()) {
+        List <Salvo> opponentList = new ArrayList<>(gamePlayer.getSalvos()) ;
+        opponentList.sort(Comparator.comparing(Salvo::getId));
+        for (Salvo salvoInList : opponentList) {
             ArrayList hitLocations = new ArrayList<>();
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("turn", salvoInList.getTurn());
@@ -145,13 +152,13 @@ public class SalvoController {
         return damages;
     }
 
-    private int FindHitsForShips(Set<String> salvoLocations, Optional<Ship> enemyShip, int[] missed, ArrayList hitted) {
+    private int FindHitsForShips(Set<String> salvoLocations, Optional<Ship> enemyShip, int[] missed, ArrayList hitLocations) {
         int hitCounter = 0;
         for (String salvoLocation : salvoLocations) {
             if (enemyShip.get().getLocations().contains(salvoLocation)) {
                 hitCounter++;
                 missed[5] -= 1;
-                hitted.add(salvoLocation);
+                hitLocations.add(salvoLocation);
             }
         }
         return hitCounter;
@@ -180,8 +187,8 @@ public class SalvoController {
     }
 
     public int CalculateSalvoTurn(GamePlayer gamePlayer) {
-        GamePlayer enemyGamePlayer = gamePlayer.getGame().GetEnemyGamePlayer(gamePlayer);
-        if (enemyGamePlayer != null && gamePlayer.getSalvos().size() <= enemyGamePlayer.getSalvos().size()) {
+        Optional<GamePlayer> enemyGamePlayer = gamePlayer.getGame().GetEnemyGamePlayer(gamePlayer);
+        if (!enemyGamePlayer.isEmpty() && gamePlayer.getSalvos().size() <= enemyGamePlayer.get().getSalvos().size()) {
             return gamePlayer.getSalvos().size() + 1;
         }
         //if enemy doesn't exist or shot has already been fired, returns 0

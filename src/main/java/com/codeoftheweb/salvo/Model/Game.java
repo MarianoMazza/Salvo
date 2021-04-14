@@ -3,10 +3,7 @@ package com.codeoftheweb.salvo.Model;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -78,11 +75,15 @@ public class Game {
         return dto;
     }
 
-    public GamePlayer GetEnemyGamePlayer(GamePlayer gamePlayer){
+    public Optional<GamePlayer> GetEnemyGamePlayer(GamePlayer gamePlayer){
         for(GamePlayer gpInList : getPlayers()){
             if(gpInList.getId() != gamePlayer.getId())
-                return gpInList;
+                return Optional.of(gpInList);
         }
-        return null;
+        return Optional.empty();
+    }
+
+    public Optional<GamePlayer> searchOponent(GamePlayer gamePlayer) {
+        return getPlayers().stream().filter(gamePlayer2 -> gamePlayer.getId() != gamePlayer2.getId()).findFirst();
     }
 }
