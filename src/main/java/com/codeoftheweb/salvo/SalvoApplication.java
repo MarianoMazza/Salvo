@@ -62,7 +62,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			GamePlayer gamePlayer13 = repoGamePlayers.save(new GamePlayer(game8.getCurrentDate(),game8,Player3));
 			GamePlayer gamePlayer14 = repoGamePlayers.save(new GamePlayer(game8.getCurrentDate(),game8,Player4));
 
-			//scores
+			/*//scores
 			Score score1= scoreRepository.save(new Score(game1,Player1,1));
 			Score score2= scoreRepository.save(new Score(game1,Player2,0f));
 			Score score3= scoreRepository.save(new Score(game2,Player1,0.5f));
@@ -79,7 +79,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			Score score13= scoreRepository.save(new Score(game8,Player2,0.5f));
 			Score score14= scoreRepository.save(new Score(game8,Player3,0.5f));
 
-			/*//ships
+			//ships
 			Ship ship1 = shipRepository.save(new Ship( new HashSet(Arrays.asList("E1", "F1", "G1")),"Submarine", gamePlayer1));
 			Ship ship2 = shipRepository.save(new Ship( new HashSet(Arrays.asList("H2", "H3", "H4")),"Destroyer", gamePlayer1));
 			Ship ship3 = shipRepository.save(new Ship( new HashSet(Arrays.asList("B4", "B5")),"Patrol Boat", gamePlayer1));

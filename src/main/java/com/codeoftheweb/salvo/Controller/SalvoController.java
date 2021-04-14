@@ -67,15 +67,21 @@ public class SalvoController {
             return "PLACESHIPS";
         if(totalDamagesSelf[0] == 5 && totalDamagesSelf[1] == 4 && totalDamagesSelf[2] == 3 && totalDamagesSelf[3] == 3 && totalDamagesSelf[4] == 2
                 && totalDamagesOpp[0] == 5 && totalDamagesOpp[1] == 4 && totalDamagesOpp[2] == 3 && totalDamagesOpp[3] == 3 && totalDamagesOpp[4] == 2){
+            scoreRepository.save(new Score(player.getGame(),player.getPlayer(),0.5f));
+            //scoreRepository.save(new Score(enemy.getGame(),enemy.getPlayer(),0.5f));
             return "TIE";
         }
         if(totalDamagesSelf[0] == 5 && totalDamagesSelf[1] == 4 && totalDamagesSelf[2] == 3 && totalDamagesSelf[3] == 3 && totalDamagesSelf[4] == 2){
+            scoreRepository.save(new Score(player.getGame(),player.getPlayer(),1));
+            //scoreRepository.save(new Score(enemy.getGame(),enemy.getPlayer(),0));
             return "WON";
         }
         if(totalDamagesOpp[0] == 5 && totalDamagesOpp[1] == 4 && totalDamagesOpp[2] == 3 && totalDamagesOpp[3] == 3 && totalDamagesOpp[4] == 2){
+            scoreRepository.save(new Score(player.getGame(),player.getPlayer(),0));
+            //scoreRepository.save(new Score(player.getGame(),player.getPlayer(),1));
             return "LOST";
         }
-        if(CalculateSalvoTurn(player) != 0){
+        if(CalculateSalvoTurn(player) != 0 && enemy.getShips().size() != 0){
             return "PLAY";
         }
         else{ return "WAIT"; }
@@ -86,8 +92,8 @@ public class SalvoController {
 
     public Map<String, Object> GameSalvoHitsMaker(GamePlayer gamePlayer, GamePlayer enemy, int[] totalDamagesSelf, int[] totalDamagesOpp) {
         Map<String, Object> hits = new LinkedHashMap<>();
-        hits.put("self",GameSalvoHits(gamePlayer,  enemy, totalDamagesSelf));
-        hits.put("opponent",GameSalvoHits(enemy,  gamePlayer, totalDamagesOpp));
+        hits.put("self",GameSalvoHits(enemy,  gamePlayer, totalDamagesOpp));
+        hits.put("opponent",GameSalvoHits(gamePlayer,  enemy, totalDamagesSelf));
         return hits;
     }
 
