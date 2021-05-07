@@ -14,6 +14,8 @@ ________________________________________
 
 •	Maven 3.6.3
 
+•	H2 Database
+
 •	Java Persistence API (JPA)
 
 •	FrontEnd HTML5, CSS3 and Javascript
